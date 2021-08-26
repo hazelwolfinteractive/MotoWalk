@@ -1,0 +1,2 @@
+rootProject.name = "MotoWalk"
+include ':app'
