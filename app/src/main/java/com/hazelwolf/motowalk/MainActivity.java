@@ -1,6 +1,7 @@
 package com.hazelwolf.motowalk;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,24 +11,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hazelwolf.motowalk.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity {
+    private ActivityMainBinding binding;
     private String name = "";
-    private Button mSubmit;
-    private TextView mInput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mSubmit = findViewById(R.id.button);
-        mInput = findViewById(R.id.inputView);
-        mSubmit.setOnClickListener(this::displayName);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.button.setOnClickListener(this::displayName);
     }
 
     private void displayName(View v){
-        name = mInput.getText().toString();
+        name = binding.inputView.getText().toString();
         if(!name.isEmpty()) {
             Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-            mInput.setText("");
+            binding.inputView.setText("");
         }
         else {
             Toast.makeText(this, "Name is empty, please enter a name", Toast.LENGTH_SHORT).show();
@@ -35,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Hide Keyboard
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert inputMethodManager != null;
         inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
+        binding.invalidateAll();
     }
 }
